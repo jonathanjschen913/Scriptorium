@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --background: #f1f5f9;
+    --foreground: #334155;
+}
+
+[data-theme='dark'] {
+    --background: #121212;
+    --foreground: #94a3b8;
+}
+
+body {
+    color: var(--foreground);
+    background: var(--background);
+    font-family: monospace;
+    font-size: 0.9rem; /* 16px */
+    line-height: 1.4rem; /* 24px */
+}
+
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+}

@@ -1,0 +1,11 @@
+:root {
+    --sign-text: #e5e7eb;
+}
+
+[data-theme='dark'] {
+    --sign-text: #1f1f1f;
+}
+
+.sign-text {
+    background-color: var(--sign-text);
+}

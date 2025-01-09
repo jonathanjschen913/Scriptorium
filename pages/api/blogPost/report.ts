@@ -1,0 +1,46 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+import { userAuthentication, TokenPayload, ReportRespose, prisma } from '@/utils';
+import { ErrorResponse } from '@/types';
+
+export default async function reportBlogPostHandler(
+    req: NextApiRequest, 
+    res: NextApiResponse<ReportRespose | ErrorResponse>
+) {
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method not allowed' });
+    }
+
+    const { blogPostId, body, contentType } = req.body;
+    if (!blogPostId) {
+        return res.status(400).json({ error: 'Missing blog post id' });
+    } else if (!body) {
+        return res.status(400).json({ error: 'Cannot send empty report' });
+    } else if (!contentType) {
+        return res.status(400).json({ error: 'Missing content type' });
+    }
+
+    /* User authorization and authentication */
+    let user = await userAuthentication(req.headers.authorization, req.headers['refresh-token']);
+    if ("error" in user) {
+        return res.status(401).json({ error: 'User not authenticated', details: user.error });
+    } else if (user.accessToken) {
+        user = await userAuthentication(user.accessToken, req.headers['refresh-token']);
+    }
+
+    /* End of user authorization and authentication */
+
+    try {
+        const report = await prisma.report.create({
+            data: {
+                body,
+                contentType,
+                blogPostId: Number(blogPostId),
+                userId: (user as TokenPayload).uId
+            }
+        });
+
+        return res.status(201).json({ message: 'Report sent successfully', report, accessToken: user.accessToken });
+    } catch (error) {
+        return res.status(500).json({ error: 'Internal server error', details: (error as Error).message });
+    }
+}

@@ -1,0 +1,9 @@
+services:
+  code-exec:
+    image: pp2  # Replace with your Dockerfile-built image
+    container_name: code-exec
+    volumes:
+      - ./shared:/code  # Mount host directory to the container
+    stdin_open: true
+    tty: true
+    restart: unless-stopped

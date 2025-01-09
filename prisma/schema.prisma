@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres.rodexywyiueoxwimuece:alextranpassword123%21@aws-0-us-east-1.pooler.supabase.com:6543/postgres?connect_timeout=3000&pgbouncer=true"
+  directUrl = "postgresql://postgres.rodexywyiueoxwimuece:alextranpassword123%21@aws-0-us-east-1.pooler.supabase.com:5432/postgres?connect_timeout=3000&pgbouncer=true"
+}
+
+model User {
+  uId           Int      @id @default(autoincrement())
+  username      String   @unique
+  password      String
+  email         String   @unique
+  phoneNumber   String   @unique
+  firstName     String
+  lastName      String
+  avatar        String
+  role          String
+  createdAt   DateTime @default(now())
+  codeTemplates CodeTemplate[]
+  blogPosts     BlogPost[]      @relation("BlogPostAuthor")
+  comments      Comment[]       @relation("CommentAuthor")
+  reports       Report[]
+  upvotedPosts  BlogPost[]     @relation("BlogPostUpvotes")
+  downvotedPosts BlogPost[]    @relation("BlogPostDownvotes")
+  upvotedComments Comment[]    @relation("CommentUpvotes")
+  downvotedComments Comment[]  @relation("CommentDownvotes")
+}
+
+
+model CodeTemplate {
+  templateId   Int       @id @default(autoincrement())
+  author       User      @relation(fields: [userId], references: [uId])
+  userId       Int
+  title        String
+  explanation  String
+  code         Code?     @relation() // Only defining the relation here
+  codeId       Int?      @unique     // Foreign key to reference Code, marked as unique
+  language     String
+  isDeleted    Boolean   @default(false)
+  isHidden     Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  tags         CodeTemplateTag[]  @relation("CodeTemplateTags")
+  reports      Report[]
+  blogPosts    BlogPost[] @relation("BlogPostCodeTemplates")
+
+  // Self-referencing relation for forked templates
+  forkedFrom   CodeTemplate? @relation("ForkedTemplates", fields: [forkedFromId], references: [templateId])
+  forkedFromId Int?
+  forks        CodeTemplate[] @relation("ForkedTemplates")
+}
+
+model CodeTemplateTag {
+  id            Int          @id @default(autoincrement())
+  tag           String       @unique
+  CodeTemplate  CodeTemplate[] @relation("CodeTemplateTags")
+}
+
+model BlogPost {
+  postId        Int           @id @default(autoincrement())
+  author        User          @relation(name: "BlogPostAuthor", fields: [userId], references: [uId])
+  userId        Int
+  title         String
+  description   String
+  body          String
+  upvotes       User[]        @relation(name: "BlogPostUpvotes")
+  downvotes     User[]        @relation(name: "BlogPostDownvotes")
+  netvote       Int           @default(0)
+  comments      Comment[]
+  reports       Report[]
+  isHidden      Boolean       @default(false)
+  isDeleted     Boolean       @default(false)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt @default(now())
+  tags          BlogPostTag[] @relation("BlogPostTags") // Many-to-many relation
+  codeTemplates CodeTemplate[] @relation("BlogPostCodeTemplates")
+}
+
+model BlogPostTag {
+  id       Int         @id @default(autoincrement())
+  tag      String      @unique
+  blogPosts BlogPost[] @relation("BlogPostTags") // Many-to-many relation
+}
+
+model Comment {
+  commentId  Int       @id @default(autoincrement())
+  author     User      @relation("CommentAuthor", fields: [userId], references: [uId])
+  userId     Int
+  body       String
+  upvotes    User[]    @relation("CommentUpvotes")
+  downvotes  User[]    @relation("CommentDownvotes")
+  reports    Report[]
+  replies    Comment[] @relation("CommentReplies")
+  parentComment Comment? @relation("CommentReplies", fields: [parentId], references: [commentId])
+  parentId   Int?
+  blogPost   BlogPost  @relation(fields: [blogPostId], references: [postId])
+  blogPostId Int
+  depth      Int       @default(0)
+  isHidden   Boolean   @default(false)
+  isDeleted  Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model Report {
+  reportId    Int       @id @default(autoincrement())
+  author      User      @relation(fields: [userId], references: [uId])
+  userId      Int
+  body        String
+  isResolved  Boolean   @default(false)
+  contentType String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  blogPost    BlogPost? @relation(fields: [blogPostId], references: [postId])
+  blogPostId  Int?
+  comment     Comment?  @relation(fields: [commentId], references: [commentId])
+  commentId   Int?
+  codeTemplate CodeTemplate? @relation(fields: [codeTemplateId], references: [templateId])
+  codeTemplateId Int?
+}
+
+model Code {
+  codeId        Int          @id @default(autoincrement())
+  body          String       // This will contain the actual code
+  language      String       // This will contain the language of the code
+  stdin         String?
+  path          String?      // Path should be the path in the backend to execute the code
+  stdout        String?
+  stderr        String?
+  codeTemplate  CodeTemplate? @relation(fields: [codeTemplateId], references: [templateId])
+  codeTemplateId Int?        @unique // Foreign key to reference CodeTemplate, marked as unique
+}

@@ -1,0 +1,28 @@
+:root {
+    --background1: #f1f5f9;
+    --foreground1: #030712;
+}
+
+[data-theme="dark"] {
+    --background1: #0f172a;
+    --foreground1: #94a3b8;
+}
+
+.theme1 {
+    background-color: var(--background-color1);
+    color: var(--foreground1);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 1s forwards;
+}

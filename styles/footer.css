@@ -1,0 +1,67 @@
+:root {
+    --background1: #e5e7eb;
+    --foreground1: #030712;
+}
+
+[data-theme='dark'] {
+    --background1: #080808;
+    --foreground1: #9ca3af;
+}
+
+.footer {
+    background: var(--background1);
+    color: var(--foreground1);
+    padding: 20px 0;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding: 20px;
+    flex-wrap: wrap;
+}
+
+.footer-section {
+    flex: 1;
+    margin: 10px;
+    min-width: 200px;
+    margin-right: 3rem;
+    margin-left: 3rem;
+}
+
+.footer-section h2 {
+    margin-bottom: 10px;
+}
+
+.footer-section p, .footer-section ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.footer-section ul li {
+    margin: 5px 0;
+}
+
+.footer-section ul li a {
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-section ul li a:hover {
+    text-decoration: underline;
+}
+
+.footer-bottom-wrapper {
+    background: var(--background1); /* Full-width background color */
+    padding-top: 1rem;
+    padding-bottom: 1rem; /* Optional for vertical spacing */
+}
+
+.footer-bottom {
+    color: var(--foreground1);
+    margin: 0 3rem; /* Margin creates space on left and right */
+    border-top: 1px solid var(--foreground1);
+    max-width: calc(100% - 6rem); /* Account for left and right margins */
+}

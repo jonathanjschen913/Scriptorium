@@ -1,0 +1,78 @@
+:root {
+    --blog-date: #94a3b8;
+    --blog-card: #e6eaee;
+    --blog-title: #475569;
+    --blog-tag: #0e7490;
+    --blog-tag-text: #cbd5e1;
+    --blog-info: #94a3b8;
+    --blog-bubble-info: #64748b;
+    --blog-input: #e5e7eb;
+    --vote-icon-disabled: #9daabd;
+    --filter-button: #0e7490;
+    --filter-button-hover: #155e75;
+}
+
+[data-theme="dark"] {
+    --blog-date: #334155;
+    --blog-card: #161616;
+    --blog-title: #cbd5e1;
+    --blog-tag-text: #9ca3af;
+    --blog-info: #475569;
+    --blog-bubble-info: #475569;
+    --blog-input: #1f1f1f;
+    --vote-icon-disabled: #263142;
+    --filter-button: #0e7490;
+    --filter-button-hover: #155e75;
+}
+
+.blog-card {
+    background-color: var(--blog-card);
+}
+
+.blog-date {
+    color: var(--blog-date);
+}
+
+.blog-title {
+    color: var(--blog-title);
+}
+
+.blog-info {
+    color: var(--blog-info);
+}
+
+.blog-tag {
+    color: var(--blog-tag-text);
+}
+
+.blog-bubble-info {
+    fill: var(--blog-bubble-info);
+    color: var(--blog-bubble-info);
+}
+
+.comment-input {
+    background-color: var(--background);
+    border-color: var(--blog-input);
+}
+
+.comment-vote {
+    fill: var(--blog-bubble-info);
+    color: var(--blog-bubble-info);
+    background-color: var(--blog-card);
+}
+
+.vote-icon:hover {
+    fill: var(--blog-tag);
+}
+
+.vote-icon-disabled {
+    fill: var(--vote-icon-disabled);
+}
+
+.filter-button {
+    background-color: var(--filter-button);
+}
+    
+.filter-button:hover {
+    background-color: var(--filter-button-hover);
+}

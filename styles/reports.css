@@ -1,0 +1,22 @@
+:root {
+    --modal-bg: #e6eaee;
+    --modal-input-bg: #e5e7eb;
+}
+
+[data-theme="dark"] {
+    --modal-bg: #161616;
+    --modal-input-bg: #1f1f1f;
+}
+
+.report-modal {
+    background-color: var(--modal-bg);
+    color: var(--foreground);
+}
+
+.modal-input {
+    background-color: var(--modal-input-bg);
+}
+
+.modal-exit {
+    fill: var(--foreground);
+}
